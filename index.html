@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090b12">
+<title>VEYLO IPA CLOUD</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#090b12;color:#f5f5fa;
+ font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+ min-height:100vh;padding:25px 16px;
+}
+.container{max-width:850px;margin:auto}
+header{display:flex;align-items:center;gap:12px;margin:15px 0 65px}
+.logo{
+ width:43px;height:43px;border-radius:14px;
+ display:grid;place-items:center;
+ background:linear-gradient(135deg,#a99aff,#5943d8);
+ font-weight:900;font-size:20px;
+}
+.brand{font-weight:800;letter-spacing:3px}
+.brand span{color:#a99aff}
+.hero{text-align:center;margin-bottom:35px}
+.eyebrow{color:#a99aff;letter-spacing:4px;font-size:11px}
+h1{font-size:clamp(35px,8vw,57px);line-height:1.08;margin:17px 0}
+.subtitle{color:#9299ad;line-height:1.6}
+.panel{
+ background:linear-gradient(145deg,#171c2b,#101420);
+ border:1px solid #293047;border-radius:22px;
+ padding:23px;margin-bottom:17px;
+}
+h2{font-size:19px;margin:0 0 8px}
+.muted{color:#9299ad;font-size:13px}
+.drop{
+ margin-top:20px;padding:38px 15px;text-align:center;
+ border:1px dashed #7162bc;border-radius:17px;
+ background:#8b79ff0c;
+}
+.upload-icon{font-size:35px;color:#a99aff;margin-bottom:12px}
+button{
+ border:0;border-radius:12px;padding:13px 20px;
+ background:linear-gradient(120deg,#927fff,#6049df);
+ color:white;font-weight:700;font-size:14px;
+}
+input[type=file]{display:none}
+.files{margin-top:20px}
+.file{
+ display:flex;align-items:center;gap:12px;
+ padding:13px;border:1px solid #293047;
+ border-radius:13px;margin-top:9px;
+}
+.fileicon{
+ background:#8b79ff20;color:#b5aaff;
+ border-radius:10px;padding:11px;font-weight:bold;
+}
+.fileinfo{flex:1;min-width:0}
+.filename{font-size:13px;overflow-wrap:anywhere}
+.filesize{font-size:11px;color:#9299ad;margin-top:4px}
+.delete{background:#292e3d;padding:8px 12px}
+.progress{height:7px;background:#293047;border-radius:9px;margin-top:15px}
+.bar{height:100%;width:0;background:#927fff;border-radius:9px}
+.stat{display:flex;justify-content:space-between;margin-top:17px}
+.feature{padding:9px 0;color:#d5d9e6;font-size:13px}
+.feature span{color:#75d9b2;margin-right:8px}
+.note{
+ color:#bcb4eb;background:#8b79ff12;
+ border:1px solid #554b89;border-radius:13px;
+ padding:13px;font-size:12px;line-height:1.5;
+}
+footer{text-align:center;color:#667087;font-size:11px;padding:25px}
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+ <div class="logo">V</div>
+ <div class="brand">VEYLO <span>IPA CLOUD</span></div>
+</header>
+
+<section class="hero">
+ <div class="eyebrow">YOUR APPS. YOUR CLOUD.</div>
+ <h1>Твои приложения.<br>Твоё облако.</h1>
+ <p class="subtitle">
+  Личное пространство для хранения IPA-файлов.<br>
+  Всё в одном месте.
+ </p>
+</section>
+
+<section class="panel">
+ <h2>Мои файлы</h2>
+ <p class="muted">Загружай IPA прямо с iPhone.</p>
+
+ <div class="drop">
+  <div class="upload-icon">↑</div>
+  <h3>Добавить IPA-файл</h3>
+  <p class="muted">Выбери файл на своём устройстве</p>
+  <button onclick="document.getElementById('picker').click()">
+   Выбрать файл
+  </button>
+  <input id="picker" type="file" accept=".ipa">
+ </div>
+
+ <div class="files">
+  <div class="stat">
+   <b>Мои загрузки</b>
+   <span class="muted" id="count">0 файлов</span>
+  </div>
+  <div id="filelist">
+   <p class="muted">Пока файлов нет.</p>
+  </div>
+ </div>
+</section>
+
+<section class="panel">
+ <h2>Моё хранилище</h2>
+ <div class="stat">
+  <b id="used">0 МБ</b>
+  <span class="muted">из 10 ГБ</span>
+ </div>
+ <div class="progress"><div class="bar" id="bar"></div></div>
+ <p class="muted">Персональное пространство пользователя</p>
+</section>
+
+<section class="panel">
+ <h2>Возможности VEYLO</h2>
+ <div class="feature"><span>✓</span> 10 ГБ для каждого пользователя</div>
+ <div class="feature"><span>✓</span> Загрузка с iPhone</div>
+ <div class="feature"><span>✓</span> Вход через Apple ID</div>
+ <div class="feature"><span>✓</span> Регистрация по электронной почте</div>
+ <div class="feature"><span>✓</span> Личные файлы и приватность</div>
+</section>
+
+<div class="note">
+ ВНИМАНИЕ: это первая версия интерфейса.
+ Сейчас файлы отображаются только в текущем сеансе браузера.
+ Облачное хранение, аккаунты и авторизация ещё не подключены.
+</div>
+
+<footer>VEYLO IPA CLOUD · 2026</footer>
+</div>
+
+<script>
+const picker=document.getElementById('picker');
+const list=document.getElementById('filelist');
+let files=[];
+const max=10*1024*1024*1024;
+
+function format(n){
+ if(n<1024*1024)return (n/1024).toFixed(1)+' КБ';
+ return (n/1024/1024).toFixed(1)+' МБ';
+}
+
+function render(){
+ list.innerHTML='';
+ let total=files.reduce((s,f)=>s+f.size,0);
+
+ document.getElementById('count').textContent=
+ files.length+' файлов';
+ document.getElementById('used').textContent=
+ (total/1024/1024).toFixed(1)+' МБ';
+ document.getElementById('bar').style.width=
+ Math.min(total/max*100,100)+'%';
+
+ if(!files.length){
+  list.innerHTML='<p class="muted">Пока файлов нет.</p>';
+  return;
+ }
+
+ files.forEach((f,i)=>{
+  const row=document.createElement('div');
+  row.className='file';
+
+  const icon=document.createElement('div');
+  icon.className='fileicon';
+  icon.textContent='IPA';
+
+  const info=document.createElement('div');
+  info.className='fileinfo';
+
+  const name=document.createElement('div');
+  name.className='filename';
+  name.textContent=f.name;
+
+  const size=document.createElement('div');
+  size.className='filesize';
+  size.textContent=format(f.size);
+
+  info.append(name,size);
+
+  const del=document.createElement('button');
+  del.className='delete';
+  del.textContent='Удалить';
+  del.onclick=()=>{
+   files.splice(i,1);
+   render();
+  };
+
+  row.append(icon,info,del);
+  list.append(row);
+ });
+}
+
+picker.addEventListener('change',()=>{
+ for(const f of picker.files){
+  if(!f.name.toLowerCase().endsWith('.ipa')){
+   alert('Выбери IPA-файл');
+   continue;
+  }
+  if(files.reduce((s,x)=>s+x.size,0)+f.size>max){
+   alert('Превышен лимит 10 ГБ');
+   continue;
+  }
+  files.push(f);
+ }
+ picker.value='';
+ render();
+});
+</script>
+</body>
+</html>
